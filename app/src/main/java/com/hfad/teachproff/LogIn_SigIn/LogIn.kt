@@ -1,7 +1,5 @@
-package com.hfad.teachproff
+package com.hfad.teachproff.LogIn_SigIn
 
-import android.app.AlertDialog
-import android.provider.ContactsContract.CommonDataKinds.Email
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -44,7 +42,8 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
-import com.hfad.teachproff.ui.theme.Button
+import com.hfad.teachproff.R
+import com.hfad.teachproff.Navigatia.Screen
 import com.hfad.teachproff.ui.theme.TeachProffTheme
 import com.hfad.teachproff.ui.theme.blue
 import com.hfad.teachproff.ui.theme.label
@@ -89,14 +88,15 @@ fun LogIn(navController: NavController) {
                 textAlign = TextAlign.Start
             )
 
-            fun isEmail(email: String) : Boolean{
-
-                val pattern = """^[a-z0-9]+@gmail\.com$""".toRegex()
-
-                return (pattern.matches(email))
-
+            fun isEmail(email: String): Boolean {
+                val pattern = """^[a-z0-9]+@gmail\.com${'$'}""".toRegex()
+                return pattern.matches(email)
             }
-                    TextField(
+            fun isPasswordValid(password: String): Boolean {
+                val passwordPattern = "^(?=.*[0-9])(?=.*[A-Z])(?=.*[@#$%^&+=!])(?=\\S+$).{8,}$".toRegex()
+                return passwordPattern.matches(password)
+            }
+            TextField(
                 value = email,
                 onValueChange = { newText ->
                     email = newText
@@ -181,39 +181,35 @@ fun LogIn(navController: NavController) {
             )
             Button(
                 onClick = {
-                    if (isEmail(email)){
-                        navController.navigate(Screen.LogIN.route)
-                    }else {
+                    if (!isEmail(email)) {
                         errorMessage = "Некорректный формат Email"
-                        showError == true
-
+                        showError = true
+                    } else if (!isPasswordValid(text2)) {
+                        errorMessage = "Пароль должен содержать минимум 8 символов, одну цифру, одну заглавную букву и один специальный символ."
+                        showError = true
+                    } else {
+                        navController.navigate(Screen.Home.route)
                     }
                 },
                 modifier = Modifier
                     .fillMaxWidth()
                     .height(64.dp)
-                    .padding(
-                        top = 12.dp
-                    ),
-                colors = ButtonDefaults.buttonColors(
-                    containerColor = blue
-                )
-
+                    .padding(top = 12.dp),
+                colors = ButtonDefaults.buttonColors(containerColor = blue)
             ) {
                 Text(
                     text = "Войти",
                     color = Color.White,
                     fontSize = 16.sp
-
                 )
             }
-            if (showError){
+            if (showError) {
                 AlertDialog(
-                    onDismissRequest = {showError == false},
+                    onDismissRequest = { showError = false },
                     title = { Text("Ошибка") },
                     text = { Text(errorMessage) },
                     confirmButton = {
-                        TextButton(onClick = {showError == false}) {
+                        TextButton(onClick = { showError = false }) {
                             Text("OK")
                         }
                     }
