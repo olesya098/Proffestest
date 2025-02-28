@@ -14,11 +14,14 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import com.hfad.teachproff.AboutShoose
+import com.hfad.teachproff.Basket
 import com.hfad.teachproff.CategoriiShoos
 import com.hfad.teachproff.Favorit
 import com.hfad.teachproff.Home.Home
 import com.hfad.teachproff.LogIn_SigIn.LogIn
 import com.hfad.teachproff.Home.Onboarding
+import com.hfad.teachproff.LogIn_SigIn.SigIn
+import com.hfad.teachproff.Poisk
 import com.hfad.teachproff.Popular
 import com.hfad.teachproff.ui.theme.TeachProffTheme
 
@@ -32,6 +35,9 @@ sealed class Screen(val route: String){
         fun createRoute(category: String) = "category_screen/$category"
     }
     object AboutShoose: Screen("aboutshoose")
+    object Poisk: Screen("poisk")
+    object Basket: Screen("basket")
+    object SigIn: Screen("sigIn")
 }
 class MainActivity : ComponentActivity() {
 
@@ -50,7 +56,7 @@ fun NavController(){
     val navController = rememberNavController()
     NavHost(
         navController = navController,
-        startDestination = Screen.AboutShoose.route,
+        startDestination = Screen.SigIn.route,
         modifier = Modifier.background(Color.Transparent)
 
     ) {
@@ -83,6 +89,15 @@ fun NavController(){
         }
         composable(Screen.AboutShoose.route) {
             AboutShoose(navController)
+        }
+        composable(Screen.Poisk.route) {
+            Poisk(navController)
+        }
+        composable(Screen.Basket.route) {
+            Basket(navController)
+        }
+        composable(Screen.SigIn.route) {
+            SigIn(navController)
         }
     }
 }

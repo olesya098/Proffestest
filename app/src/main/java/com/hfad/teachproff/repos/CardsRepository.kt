@@ -9,37 +9,37 @@ object CardsRepository {
     val cards = mutableStateListOf(
         Cardss(
             R.drawable.crossnike,
-            "Best Seller",
+            "BEST SELLER",
             "Nike Air Max",
             "₽752.00"
         ),
         Cardss(
             R.drawable.crossnike,
-            "Best Seller",
+            "BEST SELLER",
             "Nike Air Max",
             "₽752.00"
         ),
         Cardss(
             R.drawable.crossnike,
-            "Best Seller",
+            "BEST SELLER",
             "Nike Air Max",
             "₽752.00"
         ),
         Cardss(
             R.drawable.crossnike,
-            "Best Seller",
+            "BEST SELLER",
             "Nike Air Max",
             "₽752.00"
         ),
         Cardss(
             R.drawable.crossnike,
-            "Best Seller",
+            "BEST SELLER",
             "Nike Air Max",
             "₽752.00"
         ),
         Cardss(
             R.drawable.crossnike,
-            "Best Seller",
+            "BEST SELLER",
             "Nike Air Max",
             "₽752.00"
         ),

@@ -25,6 +25,8 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Search
+import androidx.compose.material3.Badge
+import androidx.compose.material3.BadgedBox
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -46,8 +48,12 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.input.pointer.motionEventSpy
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.modifier.modifierLocalConsumer
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.font.Font
+import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.tooling.preview.Preview
@@ -66,11 +72,16 @@ import com.hfad.teachproff.dataCalasses.CategoryList
 import com.hfad.teachproff.ui.theme.bac
 import com.hfad.teachproff.ui.theme.blue
 import com.hfad.teachproff.ui.theme.label
+import com.hfad.teachproff.ui.theme.red
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun Home(navController: NavController) {
     var poisk by remember { mutableStateOf(TextFieldValue("")) }
+
+    val customFontFamily = FontFamily(
+        Font(R.font.kursor, FontWeight.Normal), // Обычный стиль
+    )
 
     val actia = listOf(
         Actii(
@@ -120,12 +131,39 @@ fun Home(navController: NavController) {
 
                             )
                         }
-                        Image(
-                            painter = painterResource(id = R.drawable.bag1),
-                            contentDescription = null,
-                            modifier = Modifier.size(40.dp)
+                        Box(
+                            modifier = Modifier
+                                .size(40.dp)
+                                .background(
+                                    Color.White,
+                                    shape = CircleShape
+                                ),
+                            contentAlignment = Alignment.Center
+                        ){
+                            BadgedBox(
+                                badge = {
+                                    Badge(
+                                        contentColor = Color.White,
+                                        containerColor = red,
+                                        modifier = Modifier
+                                            .size(8.dp)
+                                            .offset(y = (-8).dp)
+                                    ){
+                                        Text(
+                                            text = ""
+                                        )
+                                    }
+                                }
+                            ) {
+                                Icon(
+                                    painter = painterResource(id = R.drawable.bagntif),
+                                    contentDescription = null,
+                                    tint = Color.Black,
+                                    modifier = Modifier.size(20.dp)
+                                )
+                            }
 
-                        )
+                        }
                     }
                 }
             )
@@ -142,39 +180,42 @@ fun Home(navController: NavController) {
                 item {
                     Row(
                         horizontalArrangement = Arrangement.SpaceAround,
-                        modifier = Modifier.fillMaxWidth()
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .clickable { navController.navigate(Screen.Poisk.route) }
                     ) {
-                        TextField(
-                            value = poisk,
-                            onValueChange = {
-                                poisk = it
-                            },
+
+                        Box(
                             modifier = Modifier
-                                .clip(RoundedCornerShape(12.dp))
-                                .size(width = 250.dp, height = 60.dp),
-                            colors = TextFieldDefaults.colors(
-                                focusedContainerColor = Color.White,
-                                unfocusedContainerColor = Color.White,
-                                focusedIndicatorColor = Color.Transparent,
-                                unfocusedIndicatorColor = Color.Transparent,
-                                focusedTextColor = Color.Black,
-                                unfocusedTextColor = label,
-                                focusedLabelColor = label,
-                                unfocusedLabelColor = label
-                            ),
-                            label = {
-                                Text(
-                                    text = "Поиск"
+                                .background(Color.White, shape = RoundedCornerShape(12.dp))
+                                .size(
+                                    width = 250.dp,
+                                    height = 50.dp
                                 )
-                            },
-                            leadingIcon = {
+                        ) {
+                            Row(
+                                modifier = Modifier.fillMaxWidth(),
+                                verticalAlignment = Alignment.CenterVertically,
+
+                            ) {
                                 Icon(
                                     imageVector = Icons.Default.Search,
                                     contentDescription = null,
-                                    tint = label
+                                    tint = label,
+                                    modifier = Modifier.padding(12.dp)
                                 )
+                                Text(
+                                    text = "Поиск",
+                                    color = label,
+                                    modifier = Modifier.padding(12.dp)
+
+                                )
+
                             }
-                        )
+
+
+                        }
+
                         Box(
                             modifier = Modifier
                                 .size(50.dp)
@@ -211,10 +252,10 @@ fun Home(navController: NavController) {
                 }
                 item {
                     Column {
-                        Row (
+                        Row(
                             modifier = Modifier.fillMaxWidth(),
                             horizontalArrangement = Arrangement.SpaceBetween
-                        ){
+                        ) {
                             Text(
                                 text = "Популярное",
                                 color = Color.Black,
@@ -225,7 +266,8 @@ fun Home(navController: NavController) {
                                 text = "Все",
                                 color = blue,
                                 fontSize = 15.sp,
-                                modifier = Modifier.padding(10.dp)
+                                modifier = Modifier
+                                    .padding(10.dp)
                                     .clickable { navController.navigate(Screen.Popular.route) }
 
                             )
@@ -234,16 +276,16 @@ fun Home(navController: NavController) {
                     }
                     LazyRow {
                         items(cards) { c ->
-                            Cardd(ca = c, navController)
+                            Cardd(ca = c, navController, customFontFamily)
                         }
                     }
                 }
                 item {
                     Column {
-                        Row (
+                        Row(
                             modifier = Modifier.fillMaxWidth(),
                             horizontalArrangement = Arrangement.SpaceBetween
-                        ){
+                        ) {
                             Text(
                                 text = "Акции",
                                 color = Color.Black,
@@ -273,7 +315,7 @@ fun Home(navController: NavController) {
 
             }
 
-                Navigate(navController)
+            Navigate(navController)
 
 
         }
@@ -281,7 +323,7 @@ fun Home(navController: NavController) {
 }
 
 @Composable
-fun Cardd(ca: Cardss, navController: NavController) {
+fun Cardd(ca: Cardss, navController: NavController, customFontFamily: FontFamily) {
     var select by remember { mutableStateOf(false) }
     var select2 by remember { mutableStateOf(false) }
     Card(
@@ -291,27 +333,34 @@ fun Cardd(ca: Cardss, navController: NavController) {
             .width(170.dp)
             .fillMaxHeight()
             .padding(8.dp)
-            .clickable {navController.navigate(Screen.AboutShoose.route)  }
+            .clickable { navController.navigate(Screen.AboutShoose.route) }
     ) {
         Column {
             Box(
                 modifier = Modifier
-                    .background(
-                        bac,
-                        shape = CircleShape
-                    )
-                    .size(30.dp)
-                    .padding(5.dp)
-                    .clickable { select = !select },
-                contentAlignment = Alignment.Center
+                    .padding(8.dp)
+            ){
+                Box(
+                    modifier = Modifier
+                        .background(
+                            bac,
+                            shape = CircleShape
+                        )
+                        .size(30.dp)
+                        .padding()
+                        .clickable { select = !select },
+                    contentAlignment = Alignment.Center
 
-            ) {
-                Image(
-                    painter = painterResource(id = if (select) R.drawable.path2 else R.drawable.path),
-                    contentDescription = null,
-                    modifier = Modifier.size(15.dp)
-                )
+                ) {
+                    Image(
+                        painter = painterResource(id = if (select) R.drawable.path2 else R.drawable.path),
+                        contentDescription = null,
+                        modifier = Modifier.size(15.dp)
+                    )
+                }
+
             }
+
             Box(
                 modifier = Modifier.fillMaxWidth(),
                 contentAlignment = Alignment.Center
@@ -319,7 +368,7 @@ fun Cardd(ca: Cardss, navController: NavController) {
                 Image(
                     painter = painterResource(id = ca.image),
                     contentDescription = null,
-                    modifier = Modifier.size(100.dp)
+                    modifier = Modifier.size(120.dp)
                 )
             }
             Text(
@@ -329,8 +378,8 @@ fun Cardd(ca: Cardss, navController: NavController) {
             )
             Text(
                 text = ca.text,
-                color = Color.Black,
-                modifier = Modifier.padding(start = 5.dp)
+                color = label,
+                modifier = Modifier.padding(start = 5.dp, top = 7.dp)
 
             )
             Row(
@@ -340,11 +389,12 @@ fun Cardd(ca: Cardss, navController: NavController) {
             ) {
                 Text(
                     text = ca.price,
+                    fontFamily = customFontFamily,
+                    fontWeight = FontWeight.Bold,
                     color = Color.Black,
-                    fontWeight = FontWeight.Light,
                     fontSize = 13.sp,
                     modifier = Modifier
-                        .padding(5.dp)
+                        .padding(7.dp)
                         .align(Alignment.Bottom)
                 )
                 Box(
@@ -427,11 +477,13 @@ fun Categories(c: CategoryList, navController: NavController) {
 
 @Composable
 fun Actis(act: Actii) {
-    Card (
+    Card(
         modifier = Modifier.padding(8.dp)
-    ){
+    ) {
         Box(
-            modifier = Modifier.fillMaxSize().background(Color.White),
+            modifier = Modifier
+                .fillMaxSize()
+                .background(Color.White),
             contentAlignment = Alignment.Center
         ) {
             Image(
@@ -444,8 +496,9 @@ fun Actis(act: Actii) {
 
     }
 }
+
 @Composable
-fun BoxScope.Navigate(navController: NavController){
+fun BoxScope.Navigate(navController: NavController) {
     var route = navController.currentBackStackEntryAsState().value?.destination?.route
 
     Box(
@@ -460,11 +513,13 @@ fun BoxScope.Navigate(navController: NavController){
             )
             .align(Alignment.BottomCenter),
         contentAlignment = Alignment.BottomCenter
-    ){
+    ) {
         Image(
             painter = painterResource(id = R.drawable.nav),
             contentDescription = null,
-            modifier = Modifier.fillMaxSize().align(Alignment.BottomCenter),
+            modifier = Modifier
+                .fillMaxSize()
+                .align(Alignment.BottomCenter),
             contentScale = ContentScale.FillBounds
         )
         Row(
@@ -472,7 +527,7 @@ fun BoxScope.Navigate(navController: NavController){
             modifier = Modifier.fillMaxWidth()
         ) {
             IconButton(
-                onClick = {navController.navigate(Screen.Home.route)}
+                onClick = { navController.navigate(Screen.Home.route) }
             ) {
                 Image(
                     painter = painterResource(id = if (route == Screen.Home.route) R.drawable.home2 else R.drawable.home),
@@ -481,7 +536,7 @@ fun BoxScope.Navigate(navController: NavController){
                 )
             }
             IconButton(
-                onClick = {navController.navigate(Screen.Favorite.route)}
+                onClick = { navController.navigate(Screen.Favorite.route) }
             ) {
                 Image(
                     painter = painterResource(id = if (route == Screen.Favorite.route) R.drawable.hard2 else R.drawable.hard),
@@ -492,7 +547,7 @@ fun BoxScope.Navigate(navController: NavController){
             }
             Box(
                 modifier = Modifier
-                    .offset(y = (-30).dp,)
+                    .offset(y = (-30).dp)
                     .size(60.dp)
                     .padding(bottom = 10.dp)
 
@@ -502,14 +557,16 @@ fun BoxScope.Navigate(navController: NavController){
                     ),
                 contentAlignment = Alignment.Center
 
-            ){
+            ) {
                 Box(
                     modifier = Modifier
-                        .background(blue,
-                            shape = CircleShape)
+                        .background(
+                            blue,
+                            shape = CircleShape
+                        )
                         .size(50.dp),
                     contentAlignment = Alignment.Center
-                ){
+                ) {
                     Image(
                         painter = painterResource(id = R.drawable.bag22),
                         contentDescription = null,
@@ -520,7 +577,7 @@ fun BoxScope.Navigate(navController: NavController){
 
             }
             IconButton(
-                onClick = {navController.navigate(Screen.Favorite.route)}
+                onClick = { navController.navigate(Screen.Favorite.route) }
             ) {
                 Image(
                     painter = painterResource(id = if (route == Screen.Favorite.route) R.drawable.notif else R.drawable.notif2),
@@ -529,7 +586,7 @@ fun BoxScope.Navigate(navController: NavController){
                 )
             }
             IconButton(
-                onClick = {navController.navigate(Screen.Favorite.route)}
+                onClick = { navController.navigate(Screen.Favorite.route) }
             ) {
                 Image(
                     painter = painterResource(id = if (route == Screen.Favorite.route) R.drawable.frame2 else R.drawable.frame),

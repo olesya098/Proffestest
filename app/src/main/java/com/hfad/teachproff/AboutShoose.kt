@@ -42,6 +42,8 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.font.Font
+import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
@@ -63,6 +65,11 @@ fun AboutShoose(
     navController: NavController,
     collapsedMaxLine: Int = 3
 ) {
+
+//    val customFontFamily = FontFamily(
+//        Font(R.font.kursor, FontWeight.Medium), // Обычный стиль
+//    )
+
     var isExpanded by remember { mutableStateOf(false) }
     var isSelected by remember { mutableStateOf(false) }
 
@@ -86,7 +93,8 @@ fun AboutShoose(
                                     Color.White,
                                     shape = CircleShape
                                 )
-                                .size(40.dp),
+                                .size(40.dp)
+                                .clickable { navController.popBackStack() },
                             contentAlignment = Alignment.Center
 
 
@@ -160,22 +168,45 @@ fun AboutShoose(
                     .fillMaxSize()
             ) {
                 item {
+                    Row {
+                        Text(
+                            text = "Nike Air Max ",
+                            fontSize = 30.sp,
+                            fontWeight = FontWeight.Medium,
+                            lineHeight = 30.sp,
+                            color = Color.Black,
+
+                            )
+                        Text(
+                            text = "270",
+                            fontSize = 20.sp,
+                            //fontFamily = customFontFamily,
+                            lineHeight = 30.sp,
+                            color = Color.Black,
+
+                            )
+
+
+                    }
                     Text(
-                        text = "Nike Air Max 270 \nEssential",
+                        text = "Essential",
                         fontSize = 30.sp,
-                        fontWeight = FontWeight.Bold,
+                        fontWeight = FontWeight.Medium,
                         lineHeight = 30.sp,
                         color = Color.Black,
 
                         )
+
                     Text(
                         text = "Men’s Shoes",
                         fontSize = 20.sp,
-                        color = label
+                        color = label,
+                        modifier = Modifier
+                            .padding(top = 10.dp)
                     )
                     Text(
                         text = "₽179.39",
-                        fontWeight = FontWeight.Bold,
+                       // fontFamily = customFontFamily,
                         fontSize = 30.sp,
                         color = Color.Black,
                         modifier = Modifier.padding(top = 10.dp)
